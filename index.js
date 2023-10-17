@@ -1,27 +1,34 @@
 const PORT = process.env.PORT ?? 3000;
 const express = require("express");
-const app = express();
+const hbs = require("express-handlebars");
+const path = require("node:path");
+const users = require("./data");
 
-//--> starting point: convert relative yo absolute path
+const app = express();
+//Express-Handlebars config
+app.engine(".hbs", hbs.engine({ extname: "hbs" })); // modificar extensión
+app.set("view engine", "hbs");
+app.set("views", "./views");
+
+//--> starting point: convert relative to absolute path
 app.get("/", (req, res) => {
-  res.sendFile("G:/UTN-Empujar/server-express/public/index.html");
+  res.render("home");
 });
-app.get("/json", (req, res) => {
-  res.json({ message: "esto es un json" });
+
+app.get("/users", (req, res) => {
+  res.json(users);
 });
-app.get("/html", (req, res) => {
-  res.send(`
-  <h1>Soy HTML</h1>
-  <p>Ah... no me había dado cuenta 😣. Mirá vos</p>
-  `);
+app.get("/users/:id", (req, res) => {
+  const { id } = req.params;
+  const user = users.find(usr => usr.id === Number(id));
+  user
+    ? res.status(200).json(user)
+    : res.status(404).json({ message: `Usuario con id ${id} no encontrado` });
 });
+
 //catch-all route
 app.get("*", (req, res) => {
-  res.json({
-    "te digo": "Mo me queméees",
-    "type error": "Not Found",
-    "status code": 404,
-  });
+  res.status(404).send("No encontrado");
 });
 
 app.listen(PORT, err => {
