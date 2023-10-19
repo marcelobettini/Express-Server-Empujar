@@ -2,7 +2,8 @@ const PORT = process.env.PORT ?? 3000;
 const express = require("express");
 const hbs = require("express-handlebars");
 const path = require("node:path");
-const users = require("./data");
+
+const users = require("./data.json");
 
 const app = express();
 //seteamos la carpeta de recursos estáticos
@@ -19,7 +20,8 @@ app.get("/", (req, res) => {
 });
 
 app.get("/users", (req, res) => {
-  res.json(users);
+  const admin = "<profe marce/>";
+  res.render("users", { users, admin });
 });
 app.get("/users/:id", (req, res) => {
   const { id } = req.params;

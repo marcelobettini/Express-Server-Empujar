@@ -1,0 +1,17 @@
+<div class="row">
+  <header>
+    {{#if admin}}
+    <p>Hola {{admin}}</p>
+    {{else}}
+    <p>No vino el admin 😪</p>
+    {{/if}}
+  </header>
+  <h2>Lista de usuarios</h2>
+  <div class="col-12">
+    <ul>
+      {{#each users}}
+      <li>{{name}}</li>
+      {{/each}}
+    </ul>
+  </div>
+</div>
